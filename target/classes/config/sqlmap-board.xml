@@ -6,9 +6,9 @@
 	
 	<insert id="insertContent" parameterType="board">
 			insert into BBOARD (ID, WRITER, TITLE, CONTENT, 
-			WRITEDATE, FILE_NAME, FILE_TYPE, FILE_PATH) 
+			WRITEDATE, READCOUNT, FILE_NAME, FILE_TYPE, FILE_PATH) 
 			values(BBOARD_SEQ.nextval, #{writer}, #{title}, #{content}, 
-			sysdate, #{fileName}, #{fileType}, #{filePath})
+			sysdate, 0, #{fileName}, #{fileType}, #{filePath})
 	</insert>
 	
 	<select id="showList" resultType="repository.BboardVo">
