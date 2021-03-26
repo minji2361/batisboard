@@ -24,6 +24,12 @@
 				<td>${board.content}</td>
 			</tr>
 			<tr>
+				<td>파일&nbsp;</td>
+				<td class="file">
+					<img src="/batisboard/board/upload/${board.fileName}" width="100">
+				</td>
+			</tr>
+			<tr>
 				<td></td>
 				<td>
 					<input type="submit" value="수정하기" onClick="javascript: form.action='write?id=${board.id}';">

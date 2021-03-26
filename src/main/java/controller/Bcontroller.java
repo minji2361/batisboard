@@ -1,14 +1,24 @@
 package controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import repository.BboardVo;
 import service.BboardService;
@@ -22,12 +32,13 @@ public class Bcontroller {
 		this.boardService = boardService;
 	}
 
-	@RequestMapping(value="/main" )
-	public String main(Model model) {
+	@RequestMapping(value="/main")
+	public String main(Model model, HttpSession session) {
 		List<BboardVo> content = boardService.showList();
 		if (content != null) {
 			model.addAttribute("content", content);
 		} 
+		session.invalidate();
 		return "/board/bbmain";
 	}
 	
@@ -45,8 +56,26 @@ public class Bcontroller {
 		
 	}
 	
-	@RequestMapping("/insert")
-	public String insert(Model model, @ModelAttribute("board")BboardVo board) {
+	@Autowired
+	ServletContext context;
+	
+	@RequestMapping(value="/insert", method=RequestMethod.POST)
+	public String insert(Model model, @ModelAttribute("board")BboardVo board, @RequestParam MultipartFile file,
+			HttpServletRequest request) throws Exception {
+		
+		//String savePath = "/board/upload/";
+		String uploadFilePath = request.getServletContext().getRealPath("/board/upload/");
+		
+		if(file.getSize() != 0) {
+			file.transferTo(new File(uploadFilePath));
+		}
+		
+		if((file!=null) && (!file.isEmpty())) {
+			board.setFileName(file.getOriginalFilename());
+			board.setFileType(file.getContentType());
+			board.setFilePath(uploadFilePath);
+		}
+		
 		boolean insert = boardService.insertContent(board);
 		if (insert) {
 			List<BboardVo> content = boardService.showList();
@@ -65,7 +94,7 @@ public class Bcontroller {
 //		return "/board/bbmain";
 //	}
 	
-	@RequestMapping("/info")
+	@RequestMapping(value="/info", method=RequestMethod.GET)
 	public String info(Model model, HttpServletRequest request, HttpSession session) {
 		String id = request.getParameter("id");
 		session.setAttribute("id", id);
@@ -74,7 +103,7 @@ public class Bcontroller {
 		return "/board/bbinfo";
 	}
 	
-	@RequestMapping("/update")
+	@RequestMapping(value="/update", method=RequestMethod.POST)
 	public String update(Model model, @ModelAttribute("board")BboardVo board, HttpServletRequest request,
 			HttpSession session) {
 		String id = (String) session.getAttribute("id");
@@ -90,7 +119,7 @@ public class Bcontroller {
 		else return "/board/bbwrite";
 	}
 	
-	@RequestMapping("/delete")
+	@RequestMapping(value="/delete", method=RequestMethod.POST)
 	public String delete(Model model, HttpServletRequest request, HttpSession session) {
 		String id = (String) session.getAttribute("id");
 		boolean delete = boardService.deleteContent(id);
@@ -101,7 +130,7 @@ public class Bcontroller {
 		else return "/board/bbinfo";
 	}
 	
-	@RequestMapping("/search")
+	@RequestMapping(value="/search", method=RequestMethod.POST)
 	public String search(Model model, HttpServletRequest request) {
 		String search = request.getParameter("searchWr");
 		List<BboardVo> searchRs = boardService.searchWriter(search);

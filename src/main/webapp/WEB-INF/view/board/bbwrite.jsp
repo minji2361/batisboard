@@ -9,7 +9,7 @@
 <title>BBOARD</title>
 </head>
 <body>
-	<form method="post" name="form">
+	<form method="post" name="form" enctype="multipart/form-data">
 		<table border="1">
 		<c:if test="${id == null}">
 			<tr>
@@ -26,7 +26,7 @@
 			</tr>
 			<tr>
 				<td>파일&nbsp;</td>
-				<td><input type="file" name="file"></td>
+				<td><input type="file" name="file" /></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -51,8 +51,7 @@
 			</tr>
 			<tr>
 				<td>파일&nbsp;</td>
-				<td class="file">
-					<a href="#"> 
+				<td class="file"><a href="#"> 
 					</a>
 				</td>
 			</tr>
