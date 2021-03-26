@@ -1,0 +1,42 @@
+bboard 게시판 설계
+
+1. 페이지
+	- 게시판 페이지
+		- 글쓰기 (등록 /bboard -> /write)
+		- 전체 리스트 ( /bboard/list -> / )
+		- 검색 (제목 & 글쓴이 자세히 보기) (/bboard/list/title=?||writer=?)
+		
+2. DB
+	- 테이블
+		- create table BBOARD (
+				"ID" varchar2(30) primary key not null,
+				"WRITER" varchar2(50) not null,
+				"TITLE" varchar2(50) not null,
+				"WRITEDATE" date not null, 
+				"CONTENT" varchar2(4000) not null);
+	- ID 순서
+		- create sequence "BBOARD_SEQ"
+				start with 1
+				increment by 1
+				minvalue 1
+				maxvalue 99999
+				noorder
+				nocycle
+				nocache;
+	- 쿼리
+		- 글등록
+		  insert into BBOARD (?, ?, ?, ?);
+		- 리스트 조회
+		  select * from BBOARD;
+		- 제목/글쓴이 검색
+		  select * from BBOARD where WRITER=?;
+		  select * from BBOARD where TITLE=?;
+		- 수정
+		  update BBOARD set TITLE=?, CONTENT=? where ID=?;
+		- 삭제
+		  delete from BBOARD where ID=?;
+	
+	
+	
+		
+		

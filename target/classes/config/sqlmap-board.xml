@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="repository.IBboardDao">
+	
+	<insert id="insertContent" parameterType="board">
+			insert into BBOARD (ID, WRITER, TITLE, CONTENT, 
+			WRITEDATE, FILE_NAME, FILE_TYPE, FILE_PATH) 
+			values(BBOARD_SEQ.nextval, #{writer}, #{title}, #{content}, 
+			sysdate, #{fileName}, #{fileType}, #{filePath})
+	</insert>
+	
+	<select id="showList" resultType="repository.BboardVo">
+			select * from BBOARD
+	</select>
+	
+	<select id="getContentInfo" parameterType="String" resultType="board">
+			select * from BBOARD where ID=#{id}
+	</select>
+	
+	<update id="readCountUp" parameterType="String">
+			update BBOARD set READCOUNT=READCOUNT+1 where ID=#{id}
+	</update>
+	
+	<update id="updateContent" parameterType="board">
+			update BBOARD set WRITER=#{writer}, TITLE=#{title}, CONTENT=#{content}, 
+			WRITEDATE=sysdate where ID=#{id}
+	</update>
+	
+	<delete id="deleteContent" parameterType="String">
+			delete from BBOARD where ID=#{id}
+	</delete>
+	
+	<select id="searchWriter" parameterType="String" resultType="repository.BboardVo">
+			select * from BBOARD where WRITER like '%'||#{searchWr}||'%'
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
