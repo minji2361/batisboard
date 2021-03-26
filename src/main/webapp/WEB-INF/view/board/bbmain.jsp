@@ -23,7 +23,7 @@
 			<td>${board.writer}</td>
 			<td><a href="info?id=${board.id}">${board.title}</a></td>
 			<td>${board.writedate}</td>
-			<td>${board.readcount}</td>
+			<td>${board.readCount}</td>
 		</tr>
 	</c:forEach>
 	</c:if>
@@ -34,7 +34,7 @@
 			<td>${board.writer}</td>
 			<td><a href="info?id=${board.id}">${board.title}</a></td>
 			<td>${board.writedate}</td>
-			<td>${board.readcount}</td>
+			<td>${board.readCount}</td>
 		</tr>
 	</c:forEach>
 	</c:if>

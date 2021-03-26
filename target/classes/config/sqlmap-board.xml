@@ -5,10 +5,8 @@
 <mapper namespace="repository.IBboardDao">
 	
 	<insert id="insertContent" parameterType="board">
-			insert into BBOARD (ID, WRITER, TITLE, CONTENT, 
-			WRITEDATE, READCOUNT, FILE_NAME, FILE_TYPE, FILE_PATH) 
-			values(BBOARD_SEQ.nextval, #{writer}, #{title}, #{content}, 
-			sysdate, 0, #{fileName}, #{fileType}, #{filePath})
+			insert into BBOARD (ID, WRITER, TITLE, CONTENT, WRITEDATE, READCOUNT, FILE_NAME, FILE_TYPE, FILE_PATH) 
+			values(BBOARD_SEQ.nextval, #{writer}, #{title}, #{content}, sysdate, #{readCount}, #{fileName, jdbcType=VARCHAR}, #{fileType, jdbcType=VARCHAR}, #{filePath, jdbcType=VARCHAR})
 	</insert>
 	
 	<select id="showList" resultType="repository.BboardVo">

@@ -13,16 +13,20 @@
 		<table border="1">
 		<c:if test="${id == null}">
 			<tr>
-				<td>글쓴이</td>
+				<td>글쓴이&nbsp;</td>
 				<td><input type="text" name="writer" /></td>
 			</tr>
 			<tr>
-				<td>제목</td>
+				<td>제목&nbsp;</td>
 				<td><input type="text" name="title" /></td>
 			</tr>
 			<tr>
-				<td>내용</td>
-				<td><textarea name="content"></textarea></td>
+				<td>내용&nbsp;</td>
+				<td><textarea name="content" rows="13" cols="50"></textarea></td>
+			</tr>
+			<tr>
+				<td>파일&nbsp;</td>
+				<td><input type="file" name="file"></td>
 			</tr>
 			<tr>
 				<td></td>
@@ -34,16 +38,23 @@
 		</c:if>
 		<c:if test="${id != null}">
 			<tr>
-				<td>글쓴이</td>
+				<td>글쓴이&nbsp;</td>
 				<td><input type="text" name="writer" value="${board.writer}"/></td>
 			</tr>
 			<tr>
-				<td>제목</td>
+				<td>제목&nbsp;</td>
 				<td><input type="text" name="title" value="${board.title}"/></td>
 			</tr>
 			<tr>
-				<td>내용</td>
-				<td><textarea name="content" >${board.content}</textarea></td>
+				<td>내용&nbsp;</td>
+				<td><textarea name="content" rows="13" cols="50">${board.content}</textarea></td>
+			</tr>
+			<tr>
+				<td>파일&nbsp;</td>
+				<td class="file">
+					<a href="#"> 
+					</a>
+				</td>
 			</tr>
 			<tr>
 				<td></td>

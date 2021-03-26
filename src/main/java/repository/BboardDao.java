@@ -17,11 +17,6 @@ public class BboardDao implements IBboardDao{
 	
 	@Override
 	public int insertContent(BboardVo board) {
-		System.out.println(board.getId());
-		System.out.println(board.getWriter());
-		System.out.println(board.getTitle());
-		System.out.println(board.getContent());
-		System.out.println(board.getWritedate());
 		return sqlSessionTemplate.insert("insertContent", board);
 	}
 

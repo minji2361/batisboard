@@ -48,7 +48,6 @@ public class Bcontroller {
 	@RequestMapping("/insert")
 	public String insert(Model model, @ModelAttribute("board")BboardVo board) {
 		boolean insert = boardService.insertContent(board);
-		System.out.println(insert);
 		if (insert) {
 			List<BboardVo> content = boardService.showList();
 			if (content != null) {

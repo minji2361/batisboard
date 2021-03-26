@@ -23,6 +23,13 @@ bboard 게시판 설계
 				noorder
 				nocycle
 				nocache;
+	- 파일 업로드 추가
+		- alter table BBOARD 
+				add (
+				    "READCOUNT" number(5,0) not null,
+				    "FILE_NAME" varchar2(45) null,
+				    "FILE_TYPE" varchar2(500) null,
+				    "FILE_PATH" varchar2(500) null);
 	- 쿼리
 		- 글등록
 		  insert into BBOARD (?, ?, ?, ?);
