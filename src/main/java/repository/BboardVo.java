@@ -16,7 +16,9 @@ import java.sql.Timestamp;
     "READCOUNT" number(5,0) not null,
     "FILE_NAME" varchar2(45) null,
     "FILE_TYPE" varchar2(500) null,
-    "FILE_PATH" varchar2(500) null);
+    "FILE_PATH" varchar2(500) null,
+    "FILE_ORIGINAL_NAME" varchar2(45) null
+    );
  */
 
 public class BboardVo {
@@ -30,11 +32,12 @@ public class BboardVo {
 	public String fileName;
 	public String fileType;
 	public String filePath;
+	public String fileOriginalName;
 	
 	
 	
 	public BboardVo(String id, String writer, String title, Timestamp writedate, String content, int readCount,
-			String fileName, String fileType, String filePath) {
+			String fileName, String fileType, String filePath, String fileOriginalName) {
 		super();
 		this.id = id;
 		this.writer = writer;
@@ -45,6 +48,7 @@ public class BboardVo {
 		this.fileName = fileName;
 		this.fileType = fileType;
 		this.filePath = filePath;
+		this.fileOriginalName = fileOriginalName;
 	}
 
 	public BboardVo() {	}
@@ -110,6 +114,14 @@ public class BboardVo {
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+
+	public String getFileOriginalName() {
+		return fileOriginalName;
+	}
+
+	public void setFileOriginalName(String fileOriginalName) {
+		this.fileOriginalName = fileOriginalName;
 	}
 	
 }

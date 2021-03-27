@@ -1,13 +1,16 @@
 package controller;
 
-import java.io.BufferedOutputStream;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import javax.annotation.Resource;
+import javax.annotation.Resources;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -19,8 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
+
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import repository.BboardVo;
+import repository.Criteria;
+import repository.PageMaker;
 import service.BboardService;
 
 @Controller("bcontroller")
@@ -33,10 +41,17 @@ public class Bcontroller {
 	}
 
 	@RequestMapping(value="/main")
-	public String main(Model model, HttpSession session) {
+	public String main(Model model, HttpSession session, Criteria cri) {
 		List<BboardVo> content = boardService.showList();
 		if (content != null) {
+			//model.addAttribute("list", boardService.boardPaging(cri));
 			model.addAttribute("content", content);
+			
+//			PageMaker pageMaker = new PageMaker();
+//			pageMaker.setCri(cri);
+//			pageMaker.setTotalCount(boardService.listCount());
+//			
+//			model.addAttribute("pageMaker", pageMaker);
 		} 
 		session.invalidate();
 		return "/board/bbmain";
@@ -56,24 +71,31 @@ public class Bcontroller {
 		
 	}
 	
+	
 	@Autowired
 	ServletContext context;
 	
 	@RequestMapping(value="/insert", method=RequestMethod.POST)
-	public String insert(Model model, @ModelAttribute("board")BboardVo board, @RequestParam MultipartFile file,
+	public String insert(Model model, @ModelAttribute("board")BboardVo board, 
+			@RequestParam("file") MultipartFile file,
 			HttpServletRequest request) throws Exception {
 		
 		//String savePath = "/board/upload/";
-		String uploadFilePath = request.getServletContext().getRealPath("/board/upload/");
+		String uploadFilePath = request.getServletContext().getRealPath("/upload");
+		int size = 5 * 1024 * 1024;
+		String encoding = "UTF-8";
+		System.out.println(uploadFilePath);
+		String fileName = request.getParameter("file");
 		
 		if(file.getSize() != 0) {
-			file.transferTo(new File(uploadFilePath));
+			file.transferTo(new File("/upload/"));
 		}
 		
 		if((file!=null) && (!file.isEmpty())) {
-			board.setFileName(file.getOriginalFilename());
+			board.setFileName(fileName);
 			board.setFileType(file.getContentType());
-			board.setFilePath(uploadFilePath);
+			board.setFilePath("/board/upload");
+			board.setFileOriginalName(file.getOriginalFilename());
 		}
 		
 		boolean insert = boardService.insertContent(board);

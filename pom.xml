@@ -52,6 +52,12 @@ https://maven.apache.org/xsd/maven-4.0.0.xsd">
 			<version>1.4</version>
 		</dependency>
 		
+		<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>jstl</artifactId>
+		<version>1.2</version>
+		</dependency>
+		
 		<!-- https://mvnreposity.com/artifact/oracle/ojdbc6 -->
 		<!-- 다운이 안되면 수동으로 로컬 리파지토리에 추가 -->
 		<dependency>

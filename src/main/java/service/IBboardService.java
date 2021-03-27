@@ -3,6 +3,7 @@ package service;
 import java.util.List;
 
 import repository.BboardVo;
+import repository.Criteria;
 
 public interface IBboardService {
 	
@@ -23,5 +24,11 @@ public interface IBboardService {
 	
 	// 글 검색
 	public List<BboardVo> searchWriter(String search);
+	
+//	// 페이징
+//	public List<BboardVo> boardPaging(Criteria cri);
+//	
+//	// 글 갯수
+//	public int listCount();
 	
 }

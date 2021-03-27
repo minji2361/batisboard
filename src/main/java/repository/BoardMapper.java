@@ -16,6 +16,7 @@ public class BoardMapper implements RowMapper<BboardVo>{
 				rs.getInt("READCOUNT"),
 				rs.getString("FILE_NAME"),
 				rs.getString("FILE_TYPE"),
-				rs.getString("FILE_PATH"));
+				rs.getString("FILE_PATH"),
+				rs.getString("FILE_ORIGINAL_NAME"));
 		}
 }

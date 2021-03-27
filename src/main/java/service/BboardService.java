@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import repository.BboardDao;
 import repository.BboardVo;
+import repository.Criteria;
 
 @Service("bboardService")
 public class BboardService implements IBboardService{
@@ -64,5 +65,15 @@ public class BboardService implements IBboardService{
 		List<BboardVo> list = boardDao.searchWriter(search);
 		return list;
 	}
+
+//	@Override
+//	public List<BboardVo> boardPaging(Criteria cri) {
+//		return boardDao.boardPaging(cri);
+//	}
+//
+//	@Override
+//	public int listCount() {
+//		return boardDao.listCount();
+//	}
 
 }

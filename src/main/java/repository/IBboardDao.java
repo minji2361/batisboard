@@ -22,4 +22,10 @@ public interface IBboardDao {
 	// 글 검색 (작성자 검색)
 	public List<BboardVo> searchWriter(String search);
 	
+//	// 페이징
+//	public List<BboardVo> boardPaging(Criteria cri);
+//	
+//	// 글 갯수
+//	public int listCount();
+	
 }

@@ -5,8 +5,10 @@
 <mapper namespace="repository.IBboardDao">
 	
 	<insert id="insertContent" parameterType="board">
-			insert into BBOARD (ID, WRITER, TITLE, CONTENT, WRITEDATE, READCOUNT, FILE_NAME, FILE_TYPE, FILE_PATH) 
-			values(BBOARD_SEQ.nextval, #{writer}, #{title}, #{content}, sysdate, #{readCount}, #{fileName, jdbcType=VARCHAR}, #{fileType, jdbcType=VARCHAR}, #{filePath, jdbcType=VARCHAR})
+			insert into BBOARD (ID, WRITER, TITLE, CONTENT, WRITEDATE, READCOUNT, FILE_NAME, FILE_TYPE, FILE_PATH,
+			FILE_ORIGINAL_NAME) values(BBOARD_SEQ.nextval, #{writer}, #{title}, #{content}, sysdate, 
+			#{readCount}, #{fileName, jdbcType=VARCHAR}, #{fileType, jdbcType=VARCHAR}, 
+			#{filePath, jdbcType=VARCHAR}, #{fileOriginalName, jdbcType=VARCHAR})
 	</insert>
 	
 	<select id="showList" resultType="repository.BboardVo">
@@ -33,6 +35,17 @@
 	<select id="searchWriter" parameterType="String" resultType="repository.BboardVo">
 			select * from BBOARD where WRITER like '%'||#{searchWr}||'%'
 	</select>
+	
+	<!-- <select id="boardPaging" parameterType="repository.Criteria" resultType="repository.BboardVo">
+			<![CDATA[select * from (select ROWNUM RNUM, ID, WRITER, TITLE, 
+			CONTENT, WRITEDATE, READCOUNT, FILE_NAME, FILE_TYPE, FILE_PATH
+			(select * from BBOARD order by ID desc)) 
+			where RNUM>=#{rowStart} and RNUM<=#{rowEnd} ]]>
+	</select>
+	
+	<select id="listCount" resultType="Integer">
+			<![CDATA[select count(ID) from BBOARD where id>0]]>
+	</select> -->
 	
 </mapper>
 
