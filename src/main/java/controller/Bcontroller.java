@@ -81,21 +81,25 @@ public class Bcontroller {
 			HttpServletRequest request) throws Exception {
 		
 		//String savePath = "/board/upload/";
-		String uploadFilePath = request.getServletContext().getRealPath("/upload");
-		int size = 5 * 1024 * 1024;
-		String encoding = "UTF-8";
-		System.out.println(uploadFilePath);
+		String uploadFilePath = request.getServletContext().getRealPath("/");
+		String attachPath = "view/board/upload";
+		String fileOriName = file.getOriginalFilename();
+		File upFile = new File(uploadFilePath + attachPath, fileOriName);
+//		int size = 5 * 1024 * 1024;
+//		String encoding = "UTF-8";
 		String fileName = request.getParameter("file");
 		
-		if(file.getSize() != 0) {
-			file.transferTo(new File("/upload/"));
+		try {
+			file.transferTo(upFile);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		if((file!=null) && (!file.isEmpty())) {
 			board.setFileName(fileName);
 			board.setFileType(file.getContentType());
 			board.setFilePath("/board/upload");
-			board.setFileOriginalName(file.getOriginalFilename());
+			board.setFileOriginalName(fileOriName);
 		}
 		
 		boolean insert = boardService.insertContent(board);
