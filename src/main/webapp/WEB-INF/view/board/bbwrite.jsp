@@ -2,9 +2,16 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="path" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
+<!-- jquery -->﻿
+<script type="text/javascript" src="jquery-3.4.1.min.js" ></script>
+<!-- ckeditor 4 -->
+<link rel="stylesheet" href="${path}/resource/ckeditor/contents.css">
+<!-- <script src="https://cdn.ckeditor.com/4.12.1/standard-all/ckeditor.js"></script> -->
+<script type="text/javascript" src="${path}/resource/ckeditor/ckeditor.js" ></script>﻿
 <meta charset="UTF-8">
 <title>BBOARD</title>
 </head>
@@ -22,7 +29,12 @@
 			</tr>
 			<tr>
 				<td>내용&nbsp;</td>
-				<td><textarea name="content" rows="13" cols="50"></textarea></td>
+				<td>
+				<textarea id="content" rows=10  name="content"></textarea>
+				<script >
+				CKEDITOR.replace('content'); // 에디터로 생성
+				</script >
+				</td>
 			</tr>
 			<tr>
 				<td>파일&nbsp;</td>
