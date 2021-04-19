@@ -1,6 +1,5 @@
 package repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -15,7 +14,6 @@ public class BboardDao implements IBboardDao{
 		this.sqlSessionTemplate = sqlSessionTemplate;
 	}
 
-	
 	@Override
 	public int insertContent(BboardVo board) {
 		return sqlSessionTemplate.insert("insertContent", board);
@@ -47,6 +45,12 @@ public class BboardDao implements IBboardDao{
 	@Override
 	public List<BboardVo> searchWriter(String search) {
 		return sqlSessionTemplate.selectList("searchWriter", search);
+	}
+
+
+	@Override
+	public List<SamboardVo> searchAll(String searchKey) {
+		return sqlSessionTemplate.selectList("searchKey", searchKey);
 	}
 
 

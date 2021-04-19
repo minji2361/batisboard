@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import repository.BboardVo;
 import repository.Criteria;
+import repository.SamboardVo;
 
 public interface IBboardService {
 	
@@ -26,6 +27,9 @@ public interface IBboardService {
 	
 	// 글 검색
 	public List<BboardVo> searchWriter(String search);
+	
+	// 검색 연습
+	public List<SamboardVo> searchAll(String searchKey);
 	
 //	// 페이징
 //	public List<BboardVo> boardPaging(Criteria cri);

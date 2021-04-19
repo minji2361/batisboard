@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import repository.BboardDao;
 import repository.BboardVo;
 import repository.Criteria;
+import repository.SamboardVo;
 
 @Service("bboardService")
 public class BboardService implements IBboardService{
@@ -68,6 +69,12 @@ public class BboardService implements IBboardService{
 	public List<BboardVo> searchWriter(String search) {
 		List<BboardVo> list = boardDao.searchWriter(search);
 		return list;
+	}
+
+	@Override
+	public List<SamboardVo> searchAll(String searchKey) {
+		List<SamboardVo> samList = boardDao.searchAll(searchKey);
+		return samList;
 	}
 
 //	@Override

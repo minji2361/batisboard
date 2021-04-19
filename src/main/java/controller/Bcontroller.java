@@ -29,6 +29,7 @@ import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import repository.BboardVo;
 import repository.Criteria;
 import repository.PageMaker;
+import repository.SamboardVo;
 import service.BboardService;
 
 @Controller("bcontroller")
@@ -81,6 +82,9 @@ public class Bcontroller {
 			HttpServletRequest request) throws Exception {
 		
 		//String savePath = "/board/upload/";
+		String placeName = request.getParameter("placeName");
+		String placeLa = request.getParameter("latitude");
+		String placeMa = request.getParameter("longtitude");
 		String uploadFilePath = request.getServletContext().getRealPath("/");
 		String attachPath = "view/board/upload";
 		String fileOriName = file.getOriginalFilename();
@@ -88,6 +92,10 @@ public class Bcontroller {
 //		int size = 5 * 1024 * 1024;
 //		String encoding = "UTF-8";
 		String fileName = request.getParameter("file");
+		
+		System.out.println(placeName);
+		System.out.println(placeLa);
+		System.out.println(placeMa);
 		
 		try {
 			file.transferTo(upFile);
@@ -104,6 +112,7 @@ public class Bcontroller {
 		
 		boolean insert = boardService.insertContent(board);
 		if (insert) {
+			
 			List<BboardVo> content = boardService.showList();
 			if (content != null) {
 				model.addAttribute("content", content);
@@ -156,7 +165,7 @@ public class Bcontroller {
 		else return "/board/bbinfo";
 	}
 	
-	@RequestMapping(value="/search", method=RequestMethod.POST)
+	@RequestMapping(value="/search", method=RequestMethod.GET)
 	public String search(Model model, HttpServletRequest request) {
 		String search = request.getParameter("searchWr");
 		List<BboardVo> searchRs = boardService.searchWriter(search);
@@ -166,6 +175,17 @@ public class Bcontroller {
 			return "/board/bbmain";
 		}
 		else return "redirect:/main";
+	}
+	
+	@RequestMapping(value="/searchAll", method=RequestMethod.GET)
+	public String searchAll(Model model, HttpServletRequest request, HttpSession session) {
+		String searchKey = request.getParameter("searchKey");
+		List<SamboardVo> samList = boardService.searchAll(searchKey);
+		model.addAttribute("samList", samList);
+		session.setAttribute("searchKey", searchKey);
+		
+		
+		return "/board/search";
 	}
 	
 }

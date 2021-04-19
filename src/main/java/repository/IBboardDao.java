@@ -22,6 +22,9 @@ public interface IBboardDao {
 	// 글 검색 (작성자 검색)
 	public List<BboardVo> searchWriter(String search);
 	
+	// 통합검색 연습
+	public List<SamboardVo> searchAll(String searchKey);
+	
 //	// 페이징
 //	public List<BboardVo> boardPaging(Criteria cri);
 //	

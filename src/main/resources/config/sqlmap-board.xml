@@ -36,6 +36,11 @@
 			select * from BBOARD where WRITER like '%'||#{searchWr}||'%'
 	</select>
 	
+	<!-- 검색 연습 -->
+	<select id="searchKey" parameterType="String" resultType="repository.SamboardVo">
+		select * from SAMBOARD where WRITER like '%'||#{searchKey}||'%'
+	</select>
+	
 	<!-- <select id="boardPaging" parameterType="repository.Criteria" resultType="repository.BboardVo">
 			<![CDATA[select * from (select ROWNUM RNUM, ID, WRITER, TITLE, 
 			CONTENT, WRITEDATE, READCOUNT, FILE_NAME, FILE_TYPE, FILE_PATH

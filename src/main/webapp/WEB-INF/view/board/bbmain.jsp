@@ -1,9 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="path" value="${pageContext.request.contextPath}" />
+
 <!DOCTYPE html>
 <html>
 <head>
+
+<link rel="stylesheet" type="text/css" href="${path}/resource/css/bootstrap.css">
+
 <meta charset="UTF-8">
 <title>BBOARD</title>
 <style type="text/css">
@@ -12,7 +17,16 @@
 </head>
 <body>
 	<h1>게시판</h1>
-	<form method="get" action="write">
+	
+	<form method="get" action="write" id="boardForm" class="form">
+	
+	<input type="text" name="searchKey" />
+	<!-- <button type="button" class="btn btn-outline-warning" onClick="javascript: form.action='searchAll';">
+	검색하기
+	</button> -->
+	<input type="submit" class="btn btn-outline-warning" value="검색" onClick="javascript: form.action='searchAll';"> 
+	<br><br>
+	
 	<table border="1">
 		<tr>
 			<td>글쓴이</td>
@@ -35,7 +49,7 @@
 	<c:forEach var="board" items="${searchWrs}">
 		<tr>
 			<td>${board.writer}</td>
-			<td><a href="info?id=${board.id}">${board.title}</a></td>
+			<td><a href="info?id=${board.id}">${board.title}+[추천수]</a></td>
 			<td>${board.writedate}</td>
 			<td>${board.readCount}</td>
 		</tr>
