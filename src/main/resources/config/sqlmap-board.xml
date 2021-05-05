@@ -1,82 +1,358 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="repository.IBboardDao">
+<mapper namespace="com.petboard.repository.BoardDaoImpl">
+
+	<!-- 최신순 리스트 -->
+	<select id="showList" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where TYPE=#{type} and BOARDSTATUS='n' and NOTICE = 'n' order by WRITEDATE desc
+	</select>
 	
-	<insert id="insertContent" parameterType="board">
-			insert into BBOARD (ID, WRITER, TITLE, CONTENT, WRITEDATE, READCOUNT, FILE_NAME, FILE_TYPE, FILE_PATH,
-			FILE_ORIGINAL_NAME) values(BBOARD_SEQ.nextval, #{writer}, #{title}, #{content}, sysdate, 
-			#{readCount}, #{fileName, jdbcType=VARCHAR}, #{fileType, jdbcType=VARCHAR}, 
-			#{filePath, jdbcType=VARCHAR}, #{fileOriginalName, jdbcType=VARCHAR})
+	<!-- 오래된순 리스트 -->
+	<select id="oldList" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where TYPE = #{type} and BOARDSTATUS = 'n' and NOTICE = 'n' order by WRITEDATE asc
+	</select>
+	
+	<!-- 추천순 리스트 -->
+	<select id="likecountList" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where TYPE = #{type} and BOARDSTATUS = 'n' and NOTICE = 'n' order by LIKECHECK desc
+	</select>
+	
+	<!-- 조회순 리스트 -->
+	<select id="readcountList" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where TYPE = #{type} and BOARDSTATUS = 'n' and NOTICE = 'n' order by READCOUNT desc
+	</select>
+	
+	<!-- 공지글 -->
+	<select id="noticeList" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where TYPE = #{type} and NOTICE = 'y' and BOARDSTATUS = 'n'
+	</select>
+	
+	<insert id="write" parameterType="com.petboard.repository.BoardVo">
+			insert into BOARD (BOARDNUMBER, MEMBERNUMBER, EMAIL, TYPE, NICKNAME, TITLE, AREA,
+			CONTENT, SUBTITLE, READCOUNT, LIKECOUNT, WRITEDATE, FILENAME, FILEORINAME, 
+			FILETYPE, FILEPATH, FILESIZE, BOARDSTATUS, NOTICE, LATITUDE, LONGITUDE, MAPPLACE)
+			values (BOARD_SEQ.nextval, #{memberNumber}, #{email}, #{type}, #{nickName}, #{title},
+			#{area}, #{content}, #{subtitle}, #{readCount}, #{likeCount}, sysdate, #{fileName}, #{fileOriName},
+			#{fileType}, #{filePath}, #{fileSize}, #{boardStatus}, #{notice}, #{latitude}, #{longitude}, #{mapPlace})
+			<!-- <selectKey keyProperty="seq" resultType="Integer">
+					select NVL(MAX(SEQ),0) from BOARD
+			</selectKey> -->
 	</insert>
 	
-	<select id="showList" resultType="repository.BboardVo">
-			select * from BBOARD
+	<select id="selectOne" parameterType="Integer" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where "BOARDNUMBER" = #{boardNumber}
 	</select>
 	
-	<select id="getContentInfo" parameterType="String" resultType="board">
-			select * from BBOARD where ID=#{id}
-	</select>
-	
-	<update id="readCountUp" parameterType="String">
-			update BBOARD set READCOUNT=READCOUNT+1 where ID=#{id}
+	<update id="addReadcount" parameterType="Integer">
+			update BOARD set READCOUNT = "READCOUNT" +1 where BOARDNUMBER = #{boardNumber}
 	</update>
 	
-	<update id="updateContent" parameterType="board">
-			update BBOARD set WRITER=#{writer}, TITLE=#{title}, CONTENT=#{content}, 
-			WRITEDATE=sysdate where ID=#{id}
+	<update id="plusLikecount" parameterType="Integer">
+			update BOARD set LIKECOUNT = LIKECOUNT +1 where BOARDNUMBER = #{boardNumber}
 	</update>
 	
-	<delete id="deleteContent" parameterType="String">
-			delete from BBOARD where ID=#{id}
-	</delete>
+	<update id="minusLike" parameterType="Integer">
+			update BOARD set LIKECOUNT = LIKECOUNT -1 where BOARDNUMBER = #{boardNumber}
+	</update>
 	
-	<select id="searchWriter" parameterType="String" resultType="repository.BboardVo">
-			select * from BBOARD where WRITER like '%'||#{searchWr}||'%'
+	<update id="updateWrite" parameterType="com.petboard.repository.BoardVo">
+			update BOARD set TITLE = #{title}, AREA = #{area}, CONTENT = #{content}, 
+			SUBTITLE = #{subtitle}, FILENAME = #{fileName}, FILEORINAME = #{fileOriName}, 
+			FILETYPE = #{fileType}, FILEPATH = #{filePath}, FILESIZE = #{fileSize},
+			LATITUDE = #{latitude}, LONGITUDE = #{longitude}, MAPPLACE = #{mapPlace}
+			where BOARDNUMBER = #{boardNumber}
+	</update>
+	
+	<update id="deleteWrite" parameterType="Integer">
+			update BOARD set BOARDSTATUS = 'y' where BOARDNUMBER = #{boardNumber}
+	</update>
+	
+	<!-- 글 작성자 확인 -->
+	<select id="checkNickBoard" parameterType="Integer" resultType="String">
+			Select NICKNAME from BOARD where BOARDNUMBER = #{boardNumber} 
 	</select>
 	
-	<!-- 검색 연습 -->
-	<select id="searchKey" parameterType="String" resultType="repository.SamboardVo">
-		select * from SAMBOARD where WRITER like '%'||#{searchKey}||'%'
-	</select>
-	
-	<!-- <select id="boardPaging" parameterType="repository.Criteria" resultType="repository.BboardVo">
-			<![CDATA[select * from (select ROWNUM RNUM, ID, WRITER, TITLE, 
-			CONTENT, WRITEDATE, READCOUNT, FILE_NAME, FILE_TYPE, FILE_PATH
-			(select * from BBOARD order by ID desc)) 
-			where RNUM>=#{rowStart} and RNUM<=#{rowEnd} ]]>
-	</select>
-	
-	<select id="listCount" resultType="Integer">
-			<![CDATA[select count(ID) from BBOARD where id>0]]>
+	<!-- 페이징
+	<select id="boardPage" >
+			select * from (select "rownum" "rnum", "boardnumber", "type", "title", "nickname", "readcount",
+			"likecount", "write_date" from (select * from board where "type" = #{type} and "board_status" = 'n'))
+			where "rnum" >= #{start} and "rnum" <= #{end} 
 	</select> -->
 	
+	<!-- 검색 -->
+	<select id="searchNickname" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where NICKNAME like '%'||#{searchNickname}||'%' order by TYPE desc
+	</select>
+	
+	<select id="searchTitle" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where TITLE like '%'||#{searchTitle}||'%' order by TYPE desc
+	</select>
+	
+	<select id="searchContent" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where CONTENT like '%'||#{searchContent}||'%' order by TYPE desc
+	</select>
+	
+	<select id="searchArea" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where AREA like '%'||#{searchArea}||'%' order by TYPE desc
+	</select>
+	
+	<!-- 게시판 더보기 -->
+	<select id="moreNickname" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where TYPE = #{type} and NICKNAME like '%'||#{searchNickname}||'%' order by TYPE desc
+	</select>
+	
+	<select id="moreTitle" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where TYPE = #{type} and TITLE like '%'||#{searchTitle}||'%' order by TYPE desc
+	</select>
+	
+	<select id="moreContent" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where TYPE = #{type} and CONTENT like '%'||#{searchContent}||'%' order by TYPE desc
+	</select>
+	
+	<select id="moreArea" resultType="com.petboard.repository.BoardVo">
+			select * from BOARD where TYPE = #{type} and AREA like '%'||#{searchArea}||'%' order by TYPE desc
+	</select>
+		<!-- 유저 페이지 -->
+		<!-- 내가 쓴 글 리스트 -->
+	<select id="myWriteList" resultType="com.petboard.repository.BoardVo">
+		select * from BOARD where
+		NICKNAME=#{nickName} and BOARDSTATUS='n'
+		order by WRITEDATE desc
+	</select>
+		<!-- 내가 작성한 글 갯수 -->
+	<select id="countWrite" resultType="Integer">
+		select
+		count(*) from BOARD where MEMBERNUMBER = #{memberNumber} and BOARDSTATUS = 'n'
+	</select>
+	
+	<!-- 관리자 페이지 -->
+	<!--관리자 페이지 작성 삭제 글  -->
+	 <select id="showNewStatus" resultType="com.petboard.repository.BoardVo">
+		/* sqlmap-board.showNewStatus */
+			SELECT BOARDNUMBER
+			,TYPE
+			,TITLE
+			,NICKNAME
+			,READCOUNT
+			,WRITEDATE
+			,LIKECOUNT
+		FROM BOARD
+		WHERE BOARDSTATUS = #{boardStatus}
+	
+	</select>
+	
+		<!-- 관리자 페이지 유저 검색 -->
+	 <select id="showNewOption" resultType="com.petboard.repository.MemberVo">
+		/* sqlmap-board.showNewOption */
+			SELECT MEMBERNUMBER
+					,EMAIL
+					,NAME
+					,NICKNAME
+					,PET
+					,JOINDATE
+					,MEMBERSTATUS
+				FROM MEMBER
+						<choose>
+							<when test="option == 'email'">
+						
+								WHERE EMAIL LIKE '%'||#{searchText}||'%'
+							</when>
+							<when test="option == 'nickname'">
+								WHERE NICKNAME LIKE '%'||#{searchText}||'%'
+							</when>
+							<otherwise>
+								WHERE 1=1
+							</otherwise>
+						</choose>
+	</select>
+	
+	
+	<!-- 보드리스트 페이징 -->
+	<select id="boardPaging" resultType="boardVo">
+	<![CDATA[
+		select * from (select rownum, BOARDNUMBER, TYPE, TITLE, NICKNAME, 
+		READCOUNT, "LIKECOUNT, WRITEDATE from
+		(select * from BOARD where BOARDSTATUS='n')) where rownum>=#{start} and rownum<=#{end}
+		]]>
+	</select>
+	<!-- 삭제된 글 리스트 페이징 -->
+	<select id="deletePaging" resultType="boardVo">
+	<![CDATA[
+		select * from (select rownum, BOARDNUMBER, TYPE, TITLE, NICKNAME, 
+		READCOUNT, LIKECOUNT, WRITEDATE  from
+		(select * from BOARD where BOARDSTATUS='n')) where rownum>=#{start} and rownum<=#{end}
+		]]>
+	</select>
+
+	
+	<!-- 댓글  쿼리-->
+	<insert id="insertReply" parameterType="com.petboard.repository.ReplyVo">
+			insert into REPLY (REPLYNUMBER, MEMBERNUMBER, EMAIL, BOARDNUMBER, REPLYTEXT, NICKNAME,
+			REGDATE, REPLYSTATUS)
+			values (REPLY_SEQ.nextval, #{memberNumber}, #{email}, #{boardNumber}, #{replyText}, #{nickName}, 
+			sysdate, 'n')
+	</insert>
+	
+	<select id="selectReply" resultType="com.petboard.repository.ReplyVo">
+			select * from REPLY where BOARDNUMBER = #{boardNumber} and REPLYSTATUS = 'n'
+			order by REPLYNUMBER desc
+ 	</select>
+	
+	<!-- 댓글 작성자 확인 -->
+	<select id="checkNickReply" parameterType="String" resultType="String">
+			Select NICKNAME from REPLY where BOARDNUMBER = #{boardNumber} 
+	</select>
+	
+	<select id="checkReplyNum" parameterType="Integer" resultType="Integer">
+			Select REPLYNUMBER from REPLY where BOARDNUMBER = #{boardNumber} 
+	</select>
+	
+	<update id="updateReply" parameterType="com.petboard.repository.ReplyVo">
+			update REPLY set REPLYTEXT=#{replyText} where REPLYNUMBER = #{replyNumber}
+	</update>
+	
+	<update id="deleteReply" parameterType="Integer">
+			delete from REPLY where REPLYNUMBER = #{replyNumber}
+	</update>
+	
+	<select id="countReply" parameterType="Integer" resultType="Integer">
+			select count(*) from REPLY where BOARDNUMBER = #{boardNumber}
+	</select>
+	
+	<!-- 댓글 페이징
+	<select id="replyPage">
+			select * from (select "rownum" "rnum", "replynumber", "usernumber", "email", "boardnumber", 
+			"replytext", "nickname", "reg_date", "reply_status" from (
+			select * from "reply" where "boardnumber" = #{boardNumber} and "reply_status" = 'y'))
+			where "rnum" >= #{start} and "rnum" <= #{end}
+	</select> -->
+	
+	
+	
+	<!-- 추천 -->
+	<insert id="updateLike" parameterType="map" >
+			insert into LIKECHECK (LIKEBOARDNUMBER, LIKEEMAIL)
+			values (#{boardNumber}, #{email})
+	</insert>
+	<!-- 추천수 취소  -->
+	<update id="deleteLike" parameterType="map">
+			delete from LIKECHECK where LIKEBOARDNUMBER = #{boardNumber} and LIKEEMAIL = #{email}
+	</update>
+	<!-- 게시글 추천수  -->
+	<select id="countLike" parameterType="Integer" resultType="Integer">
+			select count(*) from LIKECHECK where LIKEBOARDNUMBER = #{boardNumber} 
+	</select>
+	<!-- 동일 게시글 추천 여부 검색  -->
+	
+	<select id="checkLike" parameterType="map" resultType="Integer">
+	 		select count(*) from LIKECHECK where LIKEBOARDNUMBER = #{boardNumber} and LIKEEMAIL = #{email}
+	</select>
+	
+	<!-- 애견치료소게시판 게시글 수 조회  -->
+	<select id="showNewListCount" resultType="int">
+		SELECT COUNT(*) FROM BOARD
+		 WHERE TYPE = #{type}
+		   AND BOARDSTATUS = 'n'
+	</select>
+	
+	<!-- 애견치료소게시판 리스트 조회 -->
+	<select id="showNewList" resultType="com.petboard.repository.BoardVo">
+	/* sqlmap-board.showNewList */
+	SELECT * FROM (
+		SELECT 
+			A.*,ROWNUM AS RN
+					FROM (
+						SELECT  
+								ROWNUM
+						       ,BOARDNUMBER
+						       ,MEMBERNUMBER
+						       ,EMAIL
+						       ,TYPE
+						       ,NICKNAME
+						       ,TITLE
+						       ,SUBTITLE
+						       ,NOTICE
+						       ,AREA
+						       ,CONTENT
+						       ,LIKECOUNT
+						       ,READCOUNT
+						       ,TO_CHAR(WRITEDATE,'YYYY-MM-DD hh24:MI') AS WRITEDATE
+						  FROM BOARD
+						 WHERE TYPE = #{type}
+						 AND BOARDSTATUS = 'n' 
+						 <choose>
+						 	<when test="oder == 'likeCount'">
+						 		ORDER BY LIKECOUNT DESC
+						 	</when>
+						 	<when test="oder == 'recent'">
+						 		ORDER BY BOARDNUMBER DESC
+						 	</when>
+						 	<when test="oder == 'past'">
+						 		ORDER BY BOARDNUMBER ASC
+						 	</when>
+						 	<when test="oder == 'readCount'">
+						 		ORDER BY READCOUNT DESC
+						 	</when>
+						 	<otherwise>
+						 		ORDER BY NOTICE DESC,BOARDNUMBER
+						 	</otherwise>
+						 </choose>		
+				 
+				 		) A
+				 		<![CDATA[
+				 		WHERE ROWNUM <= #{end}	
+				 		]]>
+				 	)
+				 	WHERE RN > #{start}-1		<!-- 시작번호 -->
+	</select>
+	
+		
+		<select id="showNewSelect" resultType="com.petboard.repository.BoardVo">
+		/* sqlmap-board.showNewSelect */
+		
+			SELECT  BOARDNUMBER
+			       ,MEMBERNUMBER
+			       ,EMAIL
+			       ,TYPE
+			       ,NICKNAME
+			       ,TITLE
+			       ,SUBTITLE
+			       ,NOTICE
+			       ,AREA
+			       ,CONTENT
+			       ,LIKECOUNT
+			       ,READCOUNT
+			       ,TO_CHAR(WRITEDATE,'YYYY-MM-DD hh24:MI') AS WRITEDATE
+			  FROM BOARD
+			 WHERE BOARDNUMBER = #{boardNumber}		
+	</select>
+	
+	
+	<select id="showNewsearchType" resultType="com.petboard.repository.BoardVo">
+        /* sqlmap-board.showNewsearchType */
+            SELECT BOARDNUMBER
+                    ,TITLE
+                    ,SUBTITLE
+                    ,NICKNAME
+                    ,TYPE
+                    ,CONTENT
+                    ,READCOUNT
+                    ,WRITEDATE
+                    ,NOTICE
+                FROM BOARD
+                        <choose>
+                            <when test="searchType == 'title'"> 	WHERE TITLE LIKE '%'||#{searchText}||'%'	</when>
+                            <when test="searchType == 'nickname'">	WHERE NICKNAME LIKE '%'||#{searchText}||'%'	</when>
+                            <when test="searchType == 'content'">	WHERE CONTENT LIKE '%'||#{searchText}||'%'	</when>
+
+                            <otherwise>
+                                WHERE 1=1
+                            </otherwise>
+                        </choose>
+    </select>
+	
+
+
 </mapper>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

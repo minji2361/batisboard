@@ -1,0 +1,111 @@
+package com.petboard.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.petboard.repository.BoardVo;
+import com.petboard.service.BoardServiceImpl;
+import com.petboard.util.BoardPager;
+
+
+
+@Controller
+public class HospitalController {
+	
+	private BoardServiceImpl boardService;
+	static Logger log =LoggerFactory.getLogger(HospitalController.class);
+	
+	public HospitalController(BoardServiceImpl boardService) {
+		this.boardService = boardService;
+	}
+
+	
+	/** 애견치료소게시판 리스트 조회
+	 * @param model
+	 * @param boardVo
+	 * @return
+	 */
+	@RequestMapping(value="/Hospitalboard")
+	public ModelAndView HospitalBoard(Model model,BoardVo boardVo,@RequestParam(defaultValue="1") int curPage,HttpServletRequest requst) {
+		String type="hospital";
+		int count=boardService.showNewListCount(type);
+		BoardPager pager = new BoardPager(count, curPage);
+		int start =pager.getPageBegin();
+		int end = pager.getPageEnd();
+		String oder=requst.getParameter("oder");
+		ModelAndView mav =new ModelAndView();
+		List<BoardVo> showNewList = boardService.showNewList(type,oder,start,end);
+		mav.setViewName("board/hospitalboard/Hospitalboard");
+		Map<String,Object> map =new HashMap<String,Object>();
+		
+		map.put("count",count);
+		map.put("showNewList",showNewList);
+		map.put("pager",pager);
+		mav.addObject("map", map);
+		return mav;
+	}
+	
+	@RequestMapping(value="/Hospital")
+	public String Hospital(Model model) {
+		return "board/hospitalboard/Hospital";
+	}
+	
+	@RequestMapping(value="/Hospitalcontent")
+	public String Hospitalcontentview(Model model,BoardVo boardVo) {
+
+		BoardVo showNewSelect = boardService.showNewSelect(boardVo);
+		
+		//log4j 출력 테스트
+		StringBuffer sb=new StringBuffer();
+		sb.append("\n");
+		sb.append("■■■■■■     ■■■■■■\n");
+		sb.append("  ■■        ■■\n");
+		sb.append("        //       \n");
+		sb.append("                 \n");
+		sb.append("      ■■■■■      \n");
+		sb.append("        ▼        \n");
+	
+		log.warn("--------------------로그테스트시작-------------------------");
+		log.warn(sb.toString());
+		log.warn("--------------------로그테스트종료-------------------------");
+		model.addAttribute("showNewSelect", showNewSelect);
+		
+		return "board/hospitalboard/Hospitalcontentview";
+	}
+	
+	@RequestMapping(value="/Hospitaldelectsave")
+	public String Hospitaldelectsave(Model model) {
+		return "board/hospitalboard/Hospitaldelectsave";
+	}
+	
+	@RequestMapping(value="/HospitalList")
+	public String HospitalList(Model model) {
+		return "board/hospitalboard/HospitalList";
+	}
+	
+	@RequestMapping(value="/HospitalReply")
+	public String HospitalReply(Model model) {
+		return "board/hospitalboard/HospitalReply";
+	}
+	
+	@RequestMapping(value="/Hospitalupdate")
+	public String Hospitalupdate(Model model) {
+		return "board/hospitalboard/Hospitalupdate";
+	}
+	
+	@RequestMapping(value="/Hospitalwrite")
+	public String Hospitalwrite(Model model) {
+		return "board/hospitalboard/Hospitalwrite";
+	}
+}
