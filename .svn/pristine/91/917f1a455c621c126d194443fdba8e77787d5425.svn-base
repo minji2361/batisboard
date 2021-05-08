@@ -11,8 +11,8 @@
 <body>
 <div style="margin-top: 50px;">
 <center><h2>로그인</h2></center>
-	<form:form action="enterLogin" method="post" id="loginForm" name="loginForm"
-		commandName="loginCommand" onsubmit="return inputCheck()">
+	<form:form action="enterLogin" method="post" id="loginForm"
+		commandName="loginCommand">
 
 		<div class="container" style='width: 500px; float: center;'>
 			<label for="exampleInputEmail1">이메일</label>
@@ -29,13 +29,12 @@
 		</div>
 
 		<center>
-			<input type="submit" class="btn btn-secondary" value="로그인">
+			<button type="submit" class="btn btn-secondary"
+				onClick="javascript: location.href='#';">로그인</button>
 			<a href="joinPage"><button type="button" class="btn btn-secondary">회원가입</button></a>
 			<a href="FindPwd"><button type="button" class="btn btn-secondary">아이디/비밀번호찾기</button></a>
 
 		</center>
-	</form:form>
-	
 		<script>
 				var email = document.loginForm.email.value;
 				var password = document.loginForm.password.value;
@@ -43,21 +42,24 @@
 					console.log(password);
 					
 					function inputCheck(){
-						if(document.loginForm.email.value==""){
+						if(document.joinForm.email.value==""){
 							alert("이메일을 입력해 주세요.");
-							document.loginForm.email.focus();
-							return false;
+							document.joinForm.email.focus();
+							return;
 						}
 						
-						if(document.loginForm.password.value == "") {
+						if(document.joinForm.password.value == "") {
 							alert("비밀번호를 입력해 주세요.");
-							document.loginForm.password.focus();
-							return false;
+							document.joinForm.password.focus();
+							return;
 						}
+				
+					
 						
 					}
 
 			</script>
+	</form:form>
 	</div>
 </body>
 </html>

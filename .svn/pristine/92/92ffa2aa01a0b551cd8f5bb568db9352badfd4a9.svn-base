@@ -14,16 +14,6 @@
 	.message {
 		color:red;
 	}
-	a.toHome {
-    color: #FFFFFF;
-    text-decoration: none;
-    background-color: transparent
-	}
-	
-	a:hover.toHome {
-	    color: #FFFFFF;
-	    text-decoration: none;
-	}
 </style>
 </head>
 <body>
@@ -94,7 +84,7 @@
 		</tr>
 	</table><br>		
 			<input class="btn btn-secondary" type="submit" value="회원가입">
-			<button class="btn btn-secondary"><a href="/petBoard/main" class="toHome">홈으로</a></button>
+			<button class="btn btn-secondary"><a href="/petBoard/main">홈으로</a></button>
 	</form>
 </center>
 </div>

@@ -123,26 +123,19 @@ public class PetChatController {
 //				String placeLa = request.getParameter("latitude");
 //				String placeMa = request.getParameter("longitude");
 //				String placeName = request.getParameter("mapPlace");
+				//String placeLa = upload.getParameter("latitude");
+				//String placeMa = upload.getParameter("longitude");
+				//String placeName = upload.getParameter("mapPlace");
 				board.setFileName("");
 				board.setFileOriName("");
 				board.setFilePath("");
 				board.setFileType("");
 				board.setFileSize(0);
-				String placeLa = upload.getParameter("latitude");
-				String placeMa = upload.getParameter("longitude");
-				String placeName = upload.getParameter("mapPlace");
-				if(placeLa == null || placeMa == null || placeName == null) {
-					board.setLatitude(0);
-					board.setLongitude(0);
-					board.setMapPlace("");
-				} else {
-					float latitude = Float.parseFloat(placeLa);
-					float longitude = Float.parseFloat(placeMa);
-					board.setLatitude(latitude);
-					board.setLongitude(longitude);
-					board.setMapPlace(placeName);
-				}
-				
+				//float latitude = Float.parseFloat(placeLa);
+				//float longitude = Float.parseFloat(placeMa);
+				board.setLatitude(0);
+				board.setLongitude(0);
+				board.setMapPlace("");
 				board.setBoardStatus('n');
 				
 				
@@ -380,22 +373,9 @@ public class PetChatController {
 		board.setFilePath("");
 		board.setFileType("");
 		board.setFileSize(0);
-		String placeLa = request.getParameter("latitude");
-		String placeMa = request.getParameter("longitude");
-		String placeName = request.getParameter("mapPlace");
-		if(placeLa == null || placeMa == null || placeName == null) {
-			System.out.println("request : " + placeLa);
-			board.setLatitude(0);
-			board.setLongitude(0);
-			board.setMapPlace("");
-		} else {
-			System.out.println("request : " + placeLa);
-			float latitude = Float.parseFloat(placeLa);
-			float longitude = Float.parseFloat(placeMa);
-			board.setLatitude(latitude);
-			board.setLongitude(longitude);
-			board.setMapPlace(placeName);
-		}
+		board.setLatitude(0);
+		board.setLongitude(0);
+		board.setMapPlace("");
 		int boardNumber = Integer.parseInt(request.getParameter("boardNumber"));
 		board.setBoardNumber(boardNumber);
 		int update = boardService.updateWrite(board);
