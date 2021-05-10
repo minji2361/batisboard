@@ -97,9 +97,7 @@
 					<td>내용&nbsp;</td>
 					<td><textarea id="content" rows=10 name="content">${boardVo.content}</textarea>
 						<script>
-						CKEDITOR.replace('content', {
-							filebrowserUploadUrl : "imageUpload.do"
-						}); // 에디터로 생성
+							CKEDITOR.replace('content'); // 에디터로 생성
 						</script>
 					</td>
 				</tr>

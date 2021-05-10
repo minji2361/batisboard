@@ -32,7 +32,7 @@
 		width: 600px;
 	} */
 	
-	form#headerForm{
+	form {
    background-color: #ffe3e3 !important;
 }
 
@@ -71,7 +71,7 @@
 
 
 <!-- 흰색 바 -->
-<form action="" id="headerForm">
+<form action="">
  <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">메뉴</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">

@@ -420,7 +420,7 @@
 
 <!-- Reply Form {s} -->
 			<c:if test="${sessionScope.nickName != null}">
-			<div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px; margin-left: 25%; margin-right: 25%;">
+			<div class="my-3 p-3 bg-white rounded shadow-sm" style="padding-top: 10px">
 				<form:form name="form" id="form" role="form" modelAttribute="replyVo" method="post">
 				<form:hidden path="boardNumber" id="boardNumber"/>
 				<div class="row">

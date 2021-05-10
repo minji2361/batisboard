@@ -6,37 +6,39 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style type="text/css">
+a.toBack {
+    color: #FFFFFF;
+    text-decoration: none;
+    }
+
+    a:hover.toBack {
+        color: #FFFFFF;
+        text-decoration: none;
+    background-color: transparent
+    }
+</style>
 <!-- jquery -->
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+﻿<link rel="stylesheet" href="${path}/resources/css/kakaoMap.css">
+<!-- jquery -->
 ﻿
+<script type="text/javascript" src="jquery-3.4.1.min.js"></script>
 <!-- ckeditor 4 -->
 <link rel="stylesheet" href="${path}/resources/ckeditor/contents.css">
 <!-- <script src="https://cdn.ckeditor.com/4.12.1/standard-all/ckeditor.js"></script> -->
-<script type="text/javascript"
-	src="${path}/resources/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${path}/resources/ckeditor/ckeditor.js"></script>
 <!-- 카카오 지도 -->
-<link rel="stylesheet" href="${path}/resources/css/kakaoMap.css">
-﻿<script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f850654c021fcb52efb271b62ce441eb&libraries=services"></script>
-<script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f850654c021fcb52efb271b62ce441eb&libraries=LIBRARY"></script>
+<link rel="stylesheet" href="${path}/resources/css/kakaoMap.css">﻿
 <script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f850654c021fcb52efb271b62ce441eb&libraries=services"></script>
 <script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f850654c021fcb52efb271b62ce441eb&libraries=services,clusterer,drawing"></script>
-<style>
-	a.toBack {
-    color: #FFFFFF;
-    text-decoration: none;
-    background-color: transparent
-	}
-	
-	a:hover.toBack {
-	    color: #FFFFFF;
-	    text-decoration: none;
-	}
-</style>
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=LIBRARY"></script>
+<script type="text/javascript"
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services"></script>
+<script type="text/javascript"
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services,clusterer,drawing"></script>
 <meta charset="UTF-8">
 <title>사랑하냥? 사랑하개!</title>
 </head>
@@ -46,64 +48,76 @@
 	<!-- //header -->
 
 	<!-- container -->
-	<form method="post" name="writeForm" action="petchatUpdate"<%-- enctype="multipart/form-data" --%>>
-	<center>
-		<table>
-			
-			<!-- 글 수정 -->
-			<c:if test="${boardVo.boardNumber != null}">
-				<tr>
-					<td>글쓴이&nbsp;</td>
-					<td>
-						<input type="text" name="writer" value="${boardVo.nickName}" readonly/>
-						<input type="hidden" name="boardNumber" value="${boardVo.boardNumber}" />
-					</td>
-				</tr>
-				<tr>
-					<td>제목&nbsp;</td>
-					<td>
-					<input class="form-control mr-sm-2" type="text" name="title" 
-					value="${boardVo.title}" style="width:1000px;"/>
-					<c:if test="${memberLevel==0}&&${memberVo.boardStatus == 'y'}">
-					<label>
-						<input type="checkbox" id="notice" name="notice" value='n'
-						check='checked' onClick="checkbox_Check()"/>
-						공지글
-					</label>
-					</c:if>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-					<select class="custom-select" id="board_type" name="type" style="width:150px;"
-						onchange="javascript:change();">
-							<option value="item" <c:if test="${boardVo.type=='item'}"> selected </c:if>>멍냥잡화점</option>
-							<option value="lostpet" <c:if test="${boardVo.type=='lostpet'}"> selected </c:if>>구해줘 팻즈</option>
-							<option value="petplace" <c:if test="${boardVo.type=='petplace'}"> selected </c:if>>멍냥 여행사</option>
-							<option value="hospital" <c:if test="${boardVo.type=='hospital'}"> selected </c:if>>동물병원</option>
-							<option value="petchat" <c:if test="${boardVo.type=='petchat'}"> selected </c:if>>집사들의 수다</option>
-					</select> 
-					<select class="custom-select" id="board_petchat" name="subtitle"
-						style="display: ;width:150px;">
-							<option value="일상" <c:if test="${boardVo.subtitle=='일상'}"> selected </c:if>>일상</option>
-							<option value="여행" <c:if test="${boardVo.subtitle=='여행'}"> selected </c:if>>여행</option>
-							<option value="질문" <c:if test="${boardVo.subtitle=='질문'}"> selected </c:if>>질문</option>
-					</select>
-				</tr>
-				<tr>
-					<!--  <td>내용&nbsp;</td>
-				<td><textarea name="content" rows="13" cols="50">${board.content}</textarea></td>  -->
-					<td>내용&nbsp;</td>
-					<td><textarea id="content" rows=10 name="content">${boardVo.content}</textarea>
-						<script>
-						CKEDITOR.replace('content', {
-							filebrowserUploadUrl : "imageUpload.do"
-						}); // 에디터로 생성
-						</script>
-					</td>
-				</tr>
-				<tr>
+	<form method="post" name="writeForm" action="petplaceInsert"
+		enctype="multipart/form-data">
+		<center>
+			<table>
+				<c:if test="${boardVo.boardNumber == null}">
+					<tr>
+						<td>글쓴이&nbsp;</td>
+						<td><input class="form-control mr-sm-2" type="text"
+							name="nickName" value="${nickName}" style="width: 1000px;" readonly/></td>
+					</tr>
+					<tr>
+						<td>제목&nbsp;</td>
+						<td><input class="form-control mr-sm-2" type="text"
+							name="title" style="width: 800px;" /> 
+							<c:if test="${memberLevel==0}">
+                                <label> <input type="checkbox" id="notice" name="notice"
+                                    value='y' onClick="checkbox_Check()" /> 공지글
+                                </label>
+                            </c:if> 
+                        </td>
+					</tr>
+					<tr>
+						<td name="type">멍냥여행사</td>
+						<td><select class="custom-select" id="board_type" name="type"
+							style="width: 150px;" onchange="javascript:change();">
+								<option value="petplace">멍냥여행사</option>
+								<option value="item">멍냥잡화점</option>
+								<option value="lostpet">구해줘 팻즈</option>
+								<option value="hospital">동물병원</option>
+								<option value="petchat">집사들의 수다</option>
+						</select> <select class="custom-select" id="board_petplace" name="subtitle"
+							style="display:; width: 150px;">
+								<option value="카페">카페</option>
+								<option value="식당">식당</option>
+						</select>
+						<select class="custom-select" id="board_petplace2" name="area"
+                                style="display:;width:150px;">
+                                <option value="서울">서울</option>
+                                <option value="인천">인천</option>
+                                <option value="광주">광주</option>
+                                <option value="대구">대구</option>
+                                <option value="대전">대전</option>
+                                <option value="부산">부산</option>
+                                <option value="울산">울산</option>
+                                <option value="경기">경기</option>
+                                <option value="강원">강원</option>
+                                <option value="충남">충남</option>
+                                <option value="충북">충북</option>
+                                <option value="경남">경남</option>
+                                <option value="경북">경북</option>
+                                <option value="전남">전남</option>
+                                <option value="전북">전북</option>
+                                <option value="제주">제주</option>
+                            </select></td>
+					</tr>
+					<tr>
+						<td>내용</td>
+						<td>
+							<div class="form-group">
+								<label for="exampleTextarea"></label>
+								<textarea class="form-control" id="content" rows=10
+									name="content"></textarea>
+							</div> <script>
+								CKEDITOR.replace('content', {
+									filebrowserUploadUrl : "petplaceImage"
+								}); // 에디터로 생성
+							</script>
+						</td>
+					</tr>
+					<tr>
 						<td>지도</td>
 						<td>
 							<div class="map_wrap">
@@ -113,7 +127,7 @@
 								<div id="menu_wrap" class="bg_white">
 									<div class="option">
 										<div>
-											키워드 : <input type="text" value="" id="keyword"
+											키워드 : <input type="text" value="이태원 맛집" id="keyword"
 												size="15"> <input type="button" value="검색"
 												id="searchBtn" onClick="searchPlaces()">
 										</div>
@@ -121,40 +135,31 @@
 									<hr>
 									<ul id="placesList"></ul>
 									<div id="pagination"></div>
-									<input type="hidden" id="latitude" name="latitude" value="${boardVo.latitude}"> 
-									<input type="hidden" id="longitude" name="longitude" value="${boardVo.longitude}"> 
-									<input type="hidden" id="mapPlace" name="mapPlace" value="${boardVo.mapPlace}">
+									<input type="hidden" id="latitude" name="latitude"> <input
+										type="hidden" id="longitude" name="longitude"> <input
+										type="hidden" id="mapPlace" name="mapPlace">
 								</div>
 							</div>
 						</td>
 					</tr>
-				<tr>
-					<td></td>
-					<td>
-					<input type="submit" class="btn btn-secondary my-2 my-sm-0" value="수정하기">
-						<button class="btn btn-secondary my-2 my-sm-0"><a href="/petBoard/petchat" class="toBack">뒤로가기</a></button>
-					</td>
-				</tr>
-			</c:if>
-		</table>
-	</center>
+					<!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f850654c021fcb52efb271b62ce441eb"></script> -->
+					<tr>
+						<td></td>
+						<td>
+							<div style="float: right;">
+								<input type="submit" value="등록하기" class="btn btn-secondary my-2 my-sm-0" /> 
+							<a href="${path }/petplaceboard" class="toBack"><button type="button" class="btn btn-secondary my-2 my-sm-0" >뒤로가기</a>
+							</div>
+						</td>
+					</tr>
+				</c:if>
+			</table>
+		</center>
 	</form>
 
 	<script>
 	
-	function checkbox_Check(){
-        if ($("input:checkbox[name=notice]").is(":checked") == true) {
-        	document.writeForm.notice.value = 'y';
-        	console.log("체크됨" + document.writeForm.notice.value);
-				//체크가 되어있을때.    
-        } else {
-        	document.writeForm.notice.value = 'n';
-        	console.log("체크 해제" + document.writeForm.notice.value);
-                //체크가 안되어있을때.
-        }
-    }
-	
-	//말머리 관리 스크립트 
+	<!-- 말머리 관리 스크립트 -->
 		function change() {
 			if ($("#board_type").val() == "item") {
 				document.getElementById("board_item").style.display = "";
@@ -170,7 +175,7 @@
 				document.getElementById("board_lostpet").style.display = "none";
 				document.getElementById("board_lostpet1").style.display = "none";
 			}
-			
+
 			if ($("#board_type").val() == "petplace") {
 				document.getElementById("board_petplace").style.display = "";
 				document.getElementById("board_petplace1").style.display = "";
@@ -178,13 +183,13 @@
 				document.getElementById("board_petplace").style.display = "none";
 				document.getElementById("board_petplace1").style.display = "none";
 			}
-			
+
 			if ($("#board_type").val() == "hospital") {
 				document.getElementById("board_hospital").style.display = "";
 			} else {
 				document.getElementById("board_hospital").style.display = "none";
 			}
-			
+
 			if ($("#board_type").val() == "petchat") {
 				document.getElementById("board_petchat").style.display = "";
 			} else {
@@ -192,33 +197,34 @@
 			}
 		}
 	
+	// 공지 상태
+	function checkbox_Check() {
+		if ($("input:checkbox[name=notice]").is(":checked") == true) {
+			document.writeForm.notice.value = 'y';
+			console.log("체크됨"
+					+ document.writeForm.notice.value);
+			//체크가 되어있을때.    
+		} else {
+			document.writeForm.notice.value = 'n';
+			console.log("체크 해제"
+					+ document.writeForm.notice.value);
+			//체크가 안되어있을때.
+		}
+	}
+	
+	// 카카오지도
 		// 마커를 담을 배열입니다
 		var markers = [];
-		
-		// 수정 시 지도에 포인트 찍기 (추가된 부분)
-		var latitude = ${boardVo.latitude};
-		var longitude = ${boardVo.longitude};
-		
+
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 		mapOption = {
-			center : new kakao.maps.LatLng(longitude, latitude), // 지도의 중심좌표
+			center : new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
 			level : 3
 		// 지도의 확대 레벨
 		};
 
 		// 지도를 생성합니다    
 		var map = new kakao.maps.Map(mapContainer, mapOption);
-		
-		var markerPosition  = new kakao.maps.LatLng(longitude, latitude); 
-		// 이미지 지도에 표시할 마커입니다
-		// 이미지 지도에 표시할 마커는 Object 형태입니다
-		var marker = new kakao.maps.Marker({
-			    position: markerPosition
-			});
-			
-			// 마커가 지도 위에 표시되도록 설정합니다
-			marker.setMap(map);
-		//! 수정 시 지도에 포인트 찍기 (추가된 부분) 끝
 
 		// 장소 검색 객체를 생성합니다
 		var ps = new kakao.maps.services.Places();
@@ -236,10 +242,10 @@
 
 			var keyword = document.getElementById('keyword').value;
 
-			<%--if (!keyword.replace(/^\s+|\s+$/g, '')) {
+			if (!keyword.replace(/^\s+|\s+$/g, '')) {
 				alert('키워드를 입력해주세요!');
 				return false;
-			}--%>
+			}
 
 			// 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
 			ps.keywordSearch(keyword, placesSearchCB);
@@ -309,13 +315,13 @@
 									console.log("placeName:" + title);
 									//console.log(); -> 브라우저 콘솔에서 출력해서 값을 볼 수 있음
 									//document.getElementById("latitude").value = placePosition.La;
-									//$("#longitude").val(placePosition.Ma);
-									//$("#placeName").val(title);
-									
 									$("#latitude").val(placePosition.La);
 									$("#longitude").val(placePosition.Ma);
 									$("#mapPlace").val(title);
-									
+									/* $('input[name=latitude]').attr('value', placePosition.La);
+									$('input[name=longitude]').attr('value', placePosition.Ma);
+									$('input[name=mapPlace]').attr('value', title); */
+
 									//#result 영역에 좌표정보 출력
 									var resultDiv = document
 											.getElementById('result');

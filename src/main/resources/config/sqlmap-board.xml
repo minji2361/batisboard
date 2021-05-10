@@ -356,7 +356,7 @@
 						 		ORDER BY READCOUNT DESC
 						 	</when>
 						 	<otherwise>
-						 		ORDER BY NOTICE ASC ,BOARDNUMBER
+						 		ORDER BY NOTICE DESC,BOARDNUMBER DESC
 						 	</otherwise>
 						 </choose>		
 				 

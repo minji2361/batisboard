@@ -205,7 +205,7 @@ public class MemberController {
 			} else {
 				session.setAttribute("email", email);
 				session.setAttribute("message", "관리자님");
-				//session.setAttribute("nickName", nickName);
+				session.setAttribute("nickName", nickName);
 				session.setAttribute("memberNumber", memberNumber);
 				session.setAttribute("memberLevel", memberLevel);
 				response.addCookie(rememberCookie);

@@ -1,32 +1,33 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-    <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
 <script type="text/javascript">
 	$(document).ready(function(){
 
 	});
 	function list(page){
-		location.href = "itemboard?curPage="+page;
+		location.href = "Lostpetboard?curPage="+page;
 	}
 /* 9-15 */
 </script>
-
+<!-- header -->
 <jsp:include page="/WEB-INF/view/include/header.jsp" />
+<!-- //header -->
+<meta charset="UTF-8">
 <title>사랑하냥? 사랑하개!</title>
 </head>
 <body>
-<div class ="container" style="margin-top: 50px;">
-   <table class="itemboard"
-     style="text-align: center; border: 1px solid #dddddd">
-     <div>
-		<center><h2>멍냥 잡화점</h2></center>
-		<nav class="array">
-		<center>
+<body>
+<div class ="container">
+ <table>
+	<center>
+	 <div style="margin-top: 50px;"> 
+	 <h2>구해줘 펫즈</h2><br><br><br>
+		<nav class="array">	
 			<button type="button" class="btn btn-outline-secondary"onClick="javascript:location.href='?oder=likeCount';">추천순</button>
 			&nbsp;&nbsp;
 			<button type="button" class="btn btn-outline-secondary"onClick="javascript:location.href='?oder=recent';">최신순</button>
@@ -38,11 +39,11 @@
 		  </center>
 	</div>
 	<div style='width:80px;float: right;'>
-		<a href="itemboardWrite"><button type="submit" class="btn btn-outline-secondary">글쓰기</button></a>
+		<a href="lostpetWrite"><button type="submit" class="btn btn-outline-secondary">글쓰기</button></a>
 	</div>
 
-      <table class="table table-hover">
-  		 <thead>
+	 <table class="table table-hover" style="margin-top: 50px;">
+  <thead>
     <tr>
       <th scope="col">글번호</th>
       <th scope="col">제목</th>
@@ -51,14 +52,13 @@
       <th scope="col">작성시간</th>
       <th scope="col">추천수</th>
 	</tr>
-		
 		<!-- 공지글 -->
-		<c:forEach var="notice" items="${map.itemNotice}">
+		<c:forEach var="notice" items="${map.lostpetNotice}">
 			<tr>
 				<td>공지</td>
 				<td>
-					<a href="<c:url value="/itemContent/${notice.boardNumber}" />" id="notice" class="notice">
-					${notice.subtitle}&nbsp;${notice.title}[${notice.boardReplycount}]
+					<a href="<c:url value="/lostpetContent/${notice.boardNumber}" />" id="notice" class="notice">
+					${notice.subtitle}&nbsp;${notice.title}(${notice.boardReplycount})
 					</a>
 				</td>
 				<td>${notice.nickName}</td>
@@ -75,8 +75,8 @@
 					<tr>
 						<td>${list.rn}</td>
 						<td>
-							<a href="<c:url value="/itemContent/${list.boardNumber}" />">
-							[${list.subtitle}]&nbsp;${list.title}[${list.boardReplycount}]
+							<a href="<c:url value="/lostpetContent/${list.boardNumber}" />">
+							[${list.area}]&nbsp;[${list.subtitle}]&nbsp;${list.title}(${list.boardReplycount})
 							</a>
 						</td>
 						<td>${list.nickName}</td>
@@ -87,10 +87,11 @@
 				</c:when>
 			</c:choose> 
 		</c:forEach>
-  </thead>	
-	</table>
-	</div>
-	<div class="paging" style="text-align:center;font-size:20px">
+  </thead>		
+ 
+  </table>
+  </div>
+  <div class="paging" style="text-align:center;font-size:20px">
     	<c:if test="${map.pager.curBlock > 1}">
   			<a href="#" onclick="list('1')">[처음]</a>
         </c:if> 
@@ -120,11 +121,9 @@
                 <a href="#" onclick="list('${map.pager.totPage}')" style="color:black;">[끝]</a>
             </c:if> <!-- 현재 페이지블록이 총 페이지블록보다 작거나 같으면 끝으로 갈 수 있도록 링크를 추가함-->
   </div>
-  <!-- 78-107  복붙 -->
-<!-- //container -->
-
+	
 <!-- footer -->
 <jsp:include page="/WEB-INF/view/include/footer.jsp" />
-<!-- //footer -->
+<!-- //footer -->	
 </body>
 </html>

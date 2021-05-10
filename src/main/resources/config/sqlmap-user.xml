@@ -30,6 +30,7 @@
 	<select id="nicknameCheck" parameterType="String"
 		resultType="Integer">
 		select count(*) from MEMBER where NICKNAME = #{nickName} and MEMBERSTATUS='n'
+   
 	</select>
 
 	<select id="login" resultType="String">

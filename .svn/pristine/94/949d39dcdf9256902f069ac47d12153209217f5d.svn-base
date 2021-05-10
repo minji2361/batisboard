@@ -20,23 +20,11 @@
 ﻿<script type="text/javascript"
 	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f850654c021fcb52efb271b62ce441eb&libraries=services"></script>
 <script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f850654c021fcb52efb271b62ce441eb&libraries=LIBRARY"></script>
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=LIBRARY"></script>
 <script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f850654c021fcb52efb271b62ce441eb&libraries=services"></script>
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services"></script>
 <script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f850654c021fcb52efb271b62ce441eb&libraries=services,clusterer,drawing"></script>
-<style>
-	a.toBack {
-    color: #FFFFFF;
-    text-decoration: none;
-    background-color: transparent
-	}
-	
-	a:hover.toBack {
-	    color: #FFFFFF;
-	    text-decoration: none;
-	}
-</style>
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=APIKEY&libraries=services,clusterer,drawing"></script>
 <meta charset="UTF-8">
 <title>사랑하냥? 사랑하개!</title>
 </head>
@@ -44,12 +32,12 @@
 	<!-- header -->
 	<jsp:include page="/WEB-INF/view/include/header.jsp" />
 	<!-- //header -->
-
+<div style="margin-top: 50px;">
 	<!-- container -->
-	<form method="post" name="writeForm" action="petchatUpdate"<%-- enctype="multipart/form-data" --%>>
+	<form method="post" name="writeForm" action="petplaceUpdate">
 	<center>
-		<table>
-			
+	<h2>멍냥여행사</h2>
+		<table style="margin-top: 50px;">
 			<!-- 글 수정 -->
 			<c:if test="${boardVo.boardNumber != null}">
 				<tr>
@@ -78,31 +66,46 @@
 					<td>
 					<select class="custom-select" id="board_type" name="type" style="width:150px;"
 						onchange="javascript:change();">
+							<option value="petplace" <c:if test="${boardVo.type=='petplace'}"> selected </c:if>>멍냥 여행사</option>
 							<option value="item" <c:if test="${boardVo.type=='item'}"> selected </c:if>>멍냥잡화점</option>
 							<option value="lostpet" <c:if test="${boardVo.type=='lostpet'}"> selected </c:if>>구해줘 팻즈</option>
-							<option value="petplace" <c:if test="${boardVo.type=='petplace'}"> selected </c:if>>멍냥 여행사</option>
 							<option value="hospital" <c:if test="${boardVo.type=='hospital'}"> selected </c:if>>동물병원</option>
 							<option value="petchat" <c:if test="${boardVo.type=='petchat'}"> selected </c:if>>집사들의 수다</option>
 					</select> 
 					<select class="custom-select" id="board_petchat" name="subtitle"
 						style="display: ;width:150px;">
-							<option value="일상" <c:if test="${boardVo.subtitle=='일상'}"> selected </c:if>>일상</option>
-							<option value="여행" <c:if test="${boardVo.subtitle=='여행'}"> selected </c:if>>여행</option>
-							<option value="질문" <c:if test="${boardVo.subtitle=='질문'}"> selected </c:if>>질문</option>
+							<option value="카페" <c:if test="${boardVo.subtitle=='카페'}"> selected </c:if>>카페</option>
+							<option value="식당" <c:if test="${boardVo.subtitle=='식당'}"> selected </c:if>>식당</option>
 					</select>
+					<select class="custom-select" id="board_petplace2" name="area"
+                                style="display:;width:150px;">
+                                <option value="서울">서울</option>
+                                <option value="인천">인천</option>
+                                <option value="광주">광주</option>
+                                <option value="대구">대구</option>
+                                <option value="대전">대전</option>
+                                <option value="부산">부산</option>
+                                <option value="울산">울산</option>
+                                <option value="경기">경기</option>
+                                <option value="강원">강원</option>
+                                <option value="충남">충남</option>
+                                <option value="충북">충북</option>
+                                <option value="경남">경남</option>
+                                <option value="경북">경북</option>
+                                <option value="전남">전남</option>
+                                <option value="전북">전북</option>
+                                <option value="제주">제주</option>
+                            </select></td>
 				</tr>
 				<tr>
-					<!--  <td>내용&nbsp;</td>
-				<td><textarea name="content" rows="13" cols="50">${board.content}</textarea></td>  -->
 					<td>내용&nbsp;</td>
 					<td><textarea id="content" rows=10 name="content">${boardVo.content}</textarea>
 						<script>
-						CKEDITOR.replace('content', {
-							filebrowserUploadUrl : "imageUpload.do"
-						}); // 에디터로 생성
+							CKEDITOR.replace('content'); // 에디터로 생성
 						</script>
 					</td>
 				</tr>
+				<tr>
 				<tr>
 						<td>지도</td>
 						<td>
@@ -121,18 +124,19 @@
 									<hr>
 									<ul id="placesList"></ul>
 									<div id="pagination"></div>
-									<input type="hidden" id="latitude" name="latitude" value="${boardVo.latitude}"> 
-									<input type="hidden" id="longitude" name="longitude" value="${boardVo.longitude}"> 
-									<input type="hidden" id="mapPlace" name="mapPlace" value="${boardVo.mapPlace}">
+									<input type="hidden" id="latitude" name="latitude"> <input
+										type="hidden" id="longitude" name="longitude"> <input
+										type="hidden" id="mapPlace" name="mapPlace">
 								</div>
 							</div>
 						</td>
 					</tr>
-				<tr>
-					<td></td>
+					<td></td><br>
 					<td>
 					<input type="submit" class="btn btn-secondary my-2 my-sm-0" value="수정하기">
-						<button class="btn btn-secondary my-2 my-sm-0"><a href="/petBoard/petchat" class="toBack">뒤로가기</a></button>
+					<a href="$petboard/petplaceboard">
+							<button class="btn btn-secondary my-2 my-sm-0">뒤로가기</button>
+						</a>
 					</td>
 				</tr>
 			</c:if>
@@ -146,7 +150,7 @@
         if ($("input:checkbox[name=notice]").is(":checked") == true) {
         	document.writeForm.notice.value = 'y';
         	console.log("체크됨" + document.writeForm.notice.value);
-				//체크가 되어있을때.    
+                //체크가 되어있을때.    
         } else {
         	document.writeForm.notice.value = 'n';
         	console.log("체크 해제" + document.writeForm.notice.value);
@@ -154,7 +158,7 @@
         }
     }
 	
-	//말머리 관리 스크립트 
+	<!-- 말머리 관리 스크립트 -->
 		function change() {
 			if ($("#board_type").val() == "item") {
 				document.getElementById("board_item").style.display = "";
@@ -166,9 +170,11 @@
 			if ($("#board_type").val() == "lostpet") {
 				document.getElementById("board_lostpet").style.display = "";
 				document.getElementById("board_lostpet1").style.display = "";
+				document.getElementById("board_lostpet2").style.display = "";
 			} else {
 				document.getElementById("board_lostpet").style.display = "none";
 				document.getElementById("board_lostpet1").style.display = "none";
+				document.getElementById("board_lostpet2").style.display = "none";
 			}
 			
 			if ($("#board_type").val() == "petplace") {
@@ -198,7 +204,7 @@
 		// 수정 시 지도에 포인트 찍기 (추가된 부분)
 		var latitude = ${boardVo.latitude};
 		var longitude = ${boardVo.longitude};
-		
+			
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 		mapOption = {
 			center : new kakao.maps.LatLng(longitude, latitude), // 지도의 중심좌표
@@ -308,14 +314,10 @@
 											+ placePosition.Ma);
 									console.log("placeName:" + title);
 									//console.log(); -> 브라우저 콘솔에서 출력해서 값을 볼 수 있음
-									//document.getElementById("latitude").value = placePosition.La;
-									//$("#longitude").val(placePosition.Ma);
-									//$("#placeName").val(title);
-									
-									$("#latitude").val(placePosition.La);
+									document.getElementById("latitude").value = placePosition.La;
 									$("#longitude").val(placePosition.Ma);
-									$("#mapPlace").val(title);
-									
+									$("#placeName").val(title);
+
 									//#result 영역에 좌표정보 출력
 									var resultDiv = document
 											.getElementById('result');
