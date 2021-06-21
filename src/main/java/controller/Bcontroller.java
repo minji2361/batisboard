@@ -188,4 +188,10 @@ public class Bcontroller {
 		return "/board/search";
 	}
 	
+	@RequestMapping(value="/petchatboard")
+	public String petchatBoard() {
+		return "board/petchatboard/PetchatBoard";
+	}
+
+	
 }
