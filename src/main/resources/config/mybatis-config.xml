@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-config.dtd">
-<configuration>
-	<!-- 마이바티스 작동 규칙 정의 -->
-	<settings>
-		<setting name="cacheEnabled" value="false" />
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-config.dtd"> 
+	<configuration> 
+		<!-- 마이바이스 작동 규칙 --> 
+		<settings>
+		<setting name="cacheEnabled" value="false" /> 
 		<setting name="useGeneratedKeys" value="false" />
-		<setting name="mapUnderscoreToCamelCase" value="true" />
-	</settings>
-	<typeAliases><typeAlias alias="board" type="repository.BboardVo" /></typeAliases>
+		<setting name="mapUnderscoreToCamelCase" value="true" /> 
+		</settings>
+		<typeAliases>
+			<typeAlias alias="boardVo" type="com.petboard.repository.BoardVo" />
+			<typeAlias alias="memberVo" type="com.petboard.repository.MemberVo" />
+			<typeAlias alias="likeCountVo" type="com.petboard.repository.LikeCountVo" />
+			<typeAlias alias="replyVo" type="com.petboard.repository.ReplyVo" />
+		</typeAliases> 	
 </configuration>

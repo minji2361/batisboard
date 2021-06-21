@@ -1,0 +1,17 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>비밀번호 찾기</title>
+</head>
+<body>
+<form action="FindPwd" method="post">
+<h2>비밀번호 찾기</h2>
+<input type= "text" id="email" name="email" placeholder="회원가입한 이메일주소를 입력하세요" required >
+<button type ="submit">찾기</button>
+<a href="main"><button>메인으로</button></a>
+</form>
+</body>
+</html>

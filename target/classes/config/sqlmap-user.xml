@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.petboard.repository.MemberDaoImpl">
+
+	<insert id="join" parameterType="memberVo">
+		insert into MEMBER
+		(MEMBERNUMBER,
+		EMAIL, PASSWORD, NAME, 
+		NICKNAME, 
+		PET,JOINDATE,
+		MEMBERLEVEL,
+		MEMBERSTATUS, EMAILVERIFY )
+		values (USER_SEQ.nextval,
+		#{email},
+		#{password}, #{name},
+		#{nickName},
+		#{pet}, SYSDATE,
+		#{memberLevel},
+		#{memberStatus},
+		#{emailVerify})
+	</insert>
+
+	<select id="emailCheck" parameterType="String"
+		resultType="Integer">
+		select count(*) from MEMBER where EMAIL = #{email}
+	</select>
+
+	<select id="nicknameCheck" parameterType="String"
+		resultType="Integer">
+		select count(*) from MEMBER where NICKNAME = #{nickName} and MEMBERSTATUS='n'
+   
+	</select>
+
+	<select id="login" resultType="String">
+		select PASSWORD from MEMBER
+		where
+		EMAIL = #{email}
+	</select>
+
+	<select id="selectNick" resultType="String">
+		select NICKNAME from MEMBER
+		where EMAIL = #{email}
+	</select>
+
+	<select id="userList" parameterType="String"
+		resultType="memberVo">
+		select *
+		from MEMBER where EMAIL= #{email}
+	</select>
+	
+	<select id="selectLevel" parameterType="Integer" resultType="Integer">
+		select MEMBERLEVEL from MEMBER where MEMBERNUMBER = #{memberNumber}
+	</select>
+
+	<!-- 로그인확인 -->
+	<select id="loginCheck" resultType="string">
+		select PASSWORD,
+		USERSTATUS
+		from MEMBER where EMAIL=#{email}
+	</select>
+
+	<!-- 관리자/유저 구별 -->
+	<select id="adminCheck" resultType="String">
+		select USERLEVEL from
+		MEMBER
+		where EMAIL = #{email}
+	</select>
+
+	<!-- 비밀번호 변경 (찾기) -->
+	<update id="updatePwd" parameterType="String">
+		update MEMBER set
+		PASSWORD=#{password} where
+		EMAIL=#{email}
+	</update>
+
+	<!-- 마이페이지 -->
+	<!-- 회원 정보 조회 -->
+	<select id="selectUser" resultType="memberVo">
+		select * from MEMBER where
+		MEMBERNUMBER=#{memberNumber}
+	</select>
+
+	<!-- 회원 탈퇴(탈퇴체크) -->
+	<!-- 비밀번호 체크 -->
+	<select id="checkPwd" resultType="String">
+		select PASSWORD from MEMBER where EMAIL=#{email}
+	</select>
+	<!-- 탈퇴 -->
+	<update id="deleteUser" >
+		update MEMBER set MEMBERSTATUS='y' where
+		MEMBERNUMBER=#{memberNumber}
+	</update>
+
+	<!-- 회원 정보 수정 -->
+	<update id="updateUser" parameterType="memberVo">
+		update MEMBER set
+		NICKNAME=#{nickName},
+		PET=#{pet}
+		where
+		MEMBERNUMBER=#{memberNumber}
+	</update>
+
+
+	<!-- 글페이징 테스트 -->
+	<!-- select BOARDNUMBER, WRITER, TITLE FROM BOARD where ROWNUM>=1 and ROWNUM<=4; 
+		  select * from (select ROWNUM, BOARDNUMBER, TYPE, TITLE, WRITER , READCOUNT, 
+		LIKECOUNT, WRITEDATE from (select * from BOARD where BOARD_STATUS='y')) where ROWNUM>=#{start} and ROWNUM<=#{end} -->
+
+	<!-- 유저 찾기 (닉네임,이메일로 검색) -->
+	<select id="findUser" resultType="memberVo">
+		select * from MEMBER where EMAIL=#{email}
+		<!-- select * from user where "nickname"=#{nickName} -->
+	</select>
+	<!-- 가입자 수 -->
+	<select id="userCount" resultType="memberVo">
+		select count(*) from MEMBER
+		where MEMBERSTATUS='y'
+	</select>
+	<!-- 회원리스트 페이징 -->
+	<select id="userPaging" resultType="memberVo">
+		<![CDATA[
+		Select * from (select
+		rownum, MEMBERNUMBER, EMAIL, NAME, NICKNAME,PET,
+		JOINDATE, MEMBERSTATUS  from 
+		(select * from MEMBER order by
+		MEMBERNUMBER
+		desc))
+		where rownum>=#{start} and rownum=#{end}
+		]]>
+	</select>
+	
+	<select id="userListAll" resultType="memberVo">
+		select * from MEMBER where
+		MEMBERSTATUS='n'
+		order by JOINDATE desc
+	</select>
+
+	<!-- 이메일로 유저번호 조회 -->
+	<select id="userNum" resultType="Integer" parameterType="String">
+		select
+		MEMBERNUMBER from MEMBER where EMAIL=#{email}
+	</select>
+</mapper>
